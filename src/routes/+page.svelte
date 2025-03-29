@@ -1,8 +1,9 @@
 <script lang="ts">
 	let canSmoking = true;
-	let startingInterval = 1000 * 10; // 10 seconds
-	let addTime = 1000 * 5; // 5 seconds
-	// let startingInterval = 1000 * 60 * 60; // 1 hour
+	// let startingInterval = 1000 * 10; // 10 seconds
+	// let addTime = 1000 * 5; // 5 seconds
+	let addTime = 1000 * 60 * 10; // 10 minutes
+	let startingInterval = 1000 * 60 * 60; // 1 hour
 	let remainingTime = startingInterval; // Remaining time in milliseconds
 	let timer: ReturnType<typeof setInterval> | null = null;
 
@@ -33,7 +34,7 @@
 	};
 </script>
 
-<div class="p-5">
+<div class="p-5 text-white">
 	<div
 		class={`card flex flex-col justify-center gap-5 space-y-10 p-5 text-center font-mono
     ${canSmoking ? "bg-green-500" : "bg-red-500"}`}
@@ -45,7 +46,18 @@
 		{#if canSmoking}
 			<button on:click={smokingNow} class="btn btn-warning btn-lg">I AM SMOKING NOW</button>
 		{:else}
-			<p class="text-sm">Time Remaining: {Math.ceil(remainingTime / 1000)} seconds</p>
+			<div class="text-sm">
+				<p>Time Remaining:</p>
+				{#if Math.floor(remainingTime / (1000 * 60 * 60)) > 0}
+					{Math.floor(remainingTime / (1000 * 60 * 60))} hours
+				{/if}
+				{#if Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60)) > 0}
+					{Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60))} minutes
+				{/if}
+				{#if Math.floor((remainingTime % (1000 * 60)) / 1000) > 0}
+					{Math.floor((remainingTime % (1000 * 60)) / 1000)} seconds
+				{/if}
+			</div>
 		{/if}
 	</div>
 </div>
