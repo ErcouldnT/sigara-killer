@@ -1,6 +1,4 @@
 {
-  "cSpell.words": [
-    "daisyui"
-  ],
-  "editor.formatOnSave": true
+	"cSpell.words": ["daisyui", "tauri"],
+	"editor.formatOnSave": true
 }
