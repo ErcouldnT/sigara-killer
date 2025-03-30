@@ -1,5 +1,10 @@
 <script lang="ts">
 	import { load } from "@tauri-apps/plugin-store";
+	import {
+		isPermissionGranted,
+		requestPermission,
+		sendNotification
+	} from "@tauri-apps/plugin-notification";
 	import type { Store } from "@tauri-apps/plugin-store";
 
 	let canSmoking = true;
@@ -47,6 +52,9 @@
 		await store.set("remainingTime", remainingTime); // Save to store
 		endTime = null;
 		await store.set("endTime", endTime); // Clear endTime
+
+		// Show notification
+		await showNotification();
 	};
 
 	// Reset store and variables
@@ -66,6 +74,24 @@
 		if (timer) {
 			clearInterval(timer);
 			timer = null;
+		}
+	};
+
+	const showNotification = async () => {
+		let permissionGranted = await isPermissionGranted();
+
+		// If not we need to request it
+		if (!permissionGranted) {
+			const permission = await requestPermission();
+			permissionGranted = permission === "granted";
+		}
+
+		// Once permission has been granted we can send the notification
+		if (permissionGranted) {
+			sendNotification({
+				title: "Sigara Killer",
+				body: "You can smoke now!"
+			});
 		}
 	};
 
